@@ -47,12 +47,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String deleteCategory(long categoryId) {
+    public CategoryDTO deleteCategory(long categoryId) {
         //optimised way
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId", categoryId));
         categoryRepository.delete(category);
-        return "category with categoryId: " + categoryId + " deleted successfully";
+        CategoryDTO categoryDTO = modelMapper.map(category, CategoryDTO.class);
+        return categoryDTO;
 //        List<Category> categories = categoryRepository.findAll();
 //        Category category = categories.stream()
 //                .filter(c -> c.getCategoryId().equals(categoryId))
@@ -63,13 +64,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(long categoryId, Category category) {
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO, long categoryId) {
         //optimised way
        Category savedCategory = categoryRepository.findById(categoryId)
                         .orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId", categoryId));
-       savedCategory.setCategoryName(category.getCategoryName());
+        savedCategory.setCategoryName(categoryDTO.getCategoryName());
         categoryRepository.save(savedCategory);
-        return savedCategory;
+        return modelMapper.map(savedCategory, CategoryDTO.class);
 
 //        Category savedCategory = categoryRepository.findById(categoryId)
 //                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));

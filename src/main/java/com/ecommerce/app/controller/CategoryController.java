@@ -40,17 +40,18 @@ public class CategoryController {
     }
 
     @DeleteMapping("/api/admin/categories/{categoryId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable long categoryId){
-            String status = categoryService.deleteCategory(categoryId);
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable long categoryId){
+            com.ecommerce.app.payload.CategoryDTO categoryDTO = categoryService.deleteCategory(categoryId);
             //below are the three ways in which we can use response entity
             //return new ResponseEntity<>(status, HttpStatus.OK);
 //            return ResponseEntity.ok(status);
-            return ResponseEntity.status(HttpStatus.OK).body(status);
+//            return ResponseEntity.status(HttpStatus.OK).body(status);
+        return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
     }
 
     @PutMapping("/api/public/categories/{categoryId}")
-    public ResponseEntity<String> updateCategory(@RequestBody Category category, @PathVariable long categoryId){
-            com.ecommerce.app.model.Category savedCategory = categoryService.updateCategory(categoryId, category);
-            return ResponseEntity.status(HttpStatus.OK).body("Category with category id : "+ categoryId+ " is updated");
+    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable long categoryId){
+            CategoryDTO savedCategory = categoryService.updateCategory(categoryDTO, categoryId);
+            return new ResponseEntity<>(savedCategory, HttpStatus.OK);
     }
 }
