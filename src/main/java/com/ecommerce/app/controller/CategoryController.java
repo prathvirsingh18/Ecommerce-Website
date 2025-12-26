@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/api)// so for below we can remove api from starting
+//@RequestMapping("/api")// so for below we can remove api from starting
 public class CategoryController {
 
 //    private Long id = 1L;
@@ -23,11 +23,20 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService){
         this.categoryService = categoryService;
     }
-//or we can do
+////or we can do
+//    @RequestMapping(value="/api/public/categories", method = RequestMethod.GET)
+////    @GetMapping("/api/public/categories")
+//    public ResponseEntity<CategoryResponse> getAllCategories(){
+//        com.ecommerce.app.payload.CategoryResponse categoryResponse = categoryService.getAllCategories();
+//        return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
+//    }
+
+    //or we can do
     @RequestMapping(value="/api/public/categories", method = RequestMethod.GET)
 //    @GetMapping("/api/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories(){
-        com.ecommerce.app.payload.CategoryResponse categoryResponse = categoryService.getAllCategories();
+    public ResponseEntity<CategoryResponse> getAllCategories(@RequestParam(name= "pageNumber") Integer pageNumber,
+                                                             @RequestParam(name = "pageSize") Integer pageSize){
+        com.ecommerce.app.payload.CategoryResponse categoryResponse = categoryService.getAllCategories(pageNumber, pageSize);
         return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
     }
 
